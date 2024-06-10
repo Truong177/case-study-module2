@@ -1,10 +1,16 @@
 package models.user;
 
+import models.electronic.Electronic;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class User {
     private int id;
     private String name;
     private long phone;
     private Cart cart = new Cart();
+    private List<Electronic> purchaseHistory = new ArrayList<>();
 
     public User(int id, String name, long phone) {
         this.id = id;
@@ -42,5 +48,16 @@ public class User {
 
     public void setCart(Cart cart) {
         this.cart = cart;
+    }
+
+    public List<Electronic> getPurchaseHistory() {
+        return purchaseHistory;
+    }
+
+    public void setPurchaseHistory(List<Electronic> purchaseHistory) {
+        this.purchaseHistory = purchaseHistory;
+    }
+    public void addPurchase(Electronic electronic){
+        this.purchaseHistory.add(new Electronic(electronic));
     }
 }

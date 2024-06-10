@@ -1,6 +1,8 @@
 package services.impl;
 
 import models.electronic.Electronic;
+import models.electronic.Laptop;
+import models.electronic.Tivi;
 import repositories.AdminRepository;
 import services.IAdminService;
 
@@ -32,5 +34,15 @@ public class AdminService implements IAdminService {
     @Override
     public void remove(Electronic electronic) {
         adminRepository.remove(electronic);
+    }
+
+    @Override
+    public boolean updateLaptop(Laptop updateLaptop) {
+        return adminRepository.updateLaptop(updateLaptop);
+    }
+
+    @Override
+    public boolean updateTivi(Tivi updateTivi) {
+        return adminRepository.updateTivi(updateTivi);
     }
 }

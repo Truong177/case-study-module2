@@ -4,10 +4,7 @@ import models.electronic.Electronic;
 import models.user.User;
 import services.IAdminService;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class CustomerView {
     private Map<Integer, User> users;
@@ -25,6 +22,7 @@ public class CustomerView {
         System.out.println("3: View cart");
         System.out.println("4: View purchase history");
         System.out.println("5: List product");
+        System.out.println("6: Checkout");
         System.out.println("0: Exit");
         System.out.print("Input your choice: ");
 
@@ -33,10 +31,10 @@ public class CustomerView {
         while (true) {
             try {
                 choice = Integer.parseInt(scanner.nextLine());
-                if (choice >= 0 && choice <= 5) {
+                if (choice >= 0 && choice <= 6) {
                     break;
                 } else {
-                    System.out.print("Invalid choice. Please enter a number between 0 and 3: ");
+                    System.out.print("Invalid choice. Please enter a number between 0 and 6: ");
                 }
             } catch (NumberFormatException e) {
                 System.out.print("Invalid input. Please enter a valid number: ");
@@ -95,6 +93,62 @@ public class CustomerView {
                 System.out.println("Product: " + electronic.getName() + ", Code: " + electronic.getCode() +
                         ", Quantity: " + quantity + ", Price: " + electronic.getPrice());
             }
+        }
+    }
+
+    public void disPlayProduct(Electronic electronic) {
+        if (electronic != null) {
+            System.out.println("Code: " + electronic.getCode());
+            System.out.println("Name: " + electronic.getName());
+            System.out.println("Price: " + electronic.getPrice());
+        } else {
+            System.out.println("No product found.");
+
+        }
+    }
+
+    public void checkout(User user) {
+        Map<Electronic, Integer> items = user.getCart().getItems();
+        if (items.isEmpty()) {
+            System.out.println("Your cart is empty. Nothing to checkout.");
+        } else {
+            List<Electronic> itemsToRemove = new ArrayList<>();
+            for (Electronic electronic : items.keySet()) {
+                int quantity = items.get(electronic);
+                for (int i = 0; i < quantity; i++) {
+                    user.addPurchase(new Electronic(electronic));
+                }
+                itemsToRemove.add(electronic);
+            }
+            for (Electronic electronic : itemsToRemove) {
+                items.remove(electronic);
+            }
+            System.out.println("Checkout successful. Your cart is now empty.");
+        }
+    }
+
+    public void viewPurchaseHistory(User user) {
+        System.out.println("--------Purchase History--------");
+        List<Electronic> purchaseHistory = user.getPurchaseHistory();
+        if (purchaseHistory.isEmpty()){
+            System.out.println("No purchase history.");
+        }
+        else {
+            for (Electronic electronic : purchaseHistory){
+                System.out.println("Product: " + electronic.getName() + ", Code: " + electronic.getCode() +
+                        ", Quantity: " + electronic.getQuantity() + ", Price: " + electronic.getPrice());
+            }
+        }
+    }
+
+    public boolean confirmCheckout() {
+        System.out.print("Are you sure you want to checkout? (yes/no): ");
+        Scanner scanner = new Scanner(System.in);
+        String isConfirm = scanner.nextLine();
+        if (isConfirm.equals("yes")){
+            return true;
+        }else {
+            return false;
         }
     }
 }

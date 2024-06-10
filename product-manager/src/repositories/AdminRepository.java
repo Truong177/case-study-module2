@@ -1,6 +1,8 @@
 package repositories;
 
 import models.electronic.Electronic;
+import models.electronic.Laptop;
+import models.electronic.Tivi;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,4 +34,25 @@ public class AdminRepository {
     }
 
 
+    public boolean updateLaptop(Laptop updateLaptop) {
+        for (int i = 0; i < electronics.size(); i++) {
+            Electronic electronic = electronics.get(i);
+            if (electronic instanceof Laptop && electronic.getCode() == updateLaptop.getCode()) {
+                electronics.set(i, updateLaptop);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean updateTivi(Tivi updateTivi) {
+        for (int i = 0; i < electronics.size(); i++) {
+            Electronic electronic = electronics.get(i);
+            if (electronic instanceof Laptop && electronic.getCode() == updateTivi.getCode()) {
+                electronics.set(i, updateTivi);
+                return true;
+            }
+        }
+        return false;
+    }
 }

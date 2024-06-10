@@ -17,6 +17,13 @@ public class Electronic {
         this.manufacturer = manufacturer;
         this.quantity = quantity;
     }
+    public Electronic(Electronic other) {
+        this.code = other.code;
+        this.name = other.name;
+        this.price = other.price;
+        this.manufacturer = other.manufacturer;
+        this.quantity = other.quantity;
+    }
 
     public int getCode() {
         return code;

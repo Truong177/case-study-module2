@@ -39,6 +39,9 @@ public class ElectronicController {
                     int customerChoice = customerView.displayMenuCustomer();
                     switch (customerChoice) {
                         case 1:
+                            code = adminView.inputCode();
+                            electronic = adminService.findByCode(code);
+                            customerView.disPlayProduct(electronic);
                             break;
                         case 2:
                             user = customerView.viewAddCustomer();
@@ -51,7 +54,21 @@ public class ElectronicController {
                         case 3:
                             user = customerView.viewAddCustomer();
                             customerView.viewCart(user);
-
+                            break;
+                        case 4:
+                            user = customerView.viewAddCustomer();
+                            customerView.viewPurchaseHistory(user);
+                            break;
+                        case 5:
+                            int displayChoice = adminView.selectProductTypeToDisplay();
+                            List<Electronic> electronics = adminService.getAll();
+                            adminView.display(electronics, displayChoice);
+                            break;
+                        case 6:
+                            user = customerView.viewAddCustomer();
+                            if (customerView.confirmCheckout()) {
+                                customerView.checkout(user);
+                            }
                     }
                     if (customerChoice == 0) {
                         break;
@@ -68,9 +85,40 @@ public class ElectronicController {
                             adminView.viewMessage(result);
                             break;
                         case 2:
+                            int choiceEdit = adminView.selectProductType();
+                            if (choiceEdit == 1 || choiceEdit == 2) {
+                                code = adminView.inputCode();
+                                electronic = adminService.findByCode(code);
+                                if (electronic != null) {
+                                    switch (choiceEdit) {
+                                        case 1:
+                                            if (electronic instanceof Laptop) {
+                                                Laptop laptop = (Laptop) electronic;
+                                                Laptop updatedLaptop = adminView.viewEditLaptop(laptop);
+                                                result = adminService.updateLaptop(updatedLaptop);
+                                                adminView.viewMessage(result);
+                                            } else {
+                                                adminView.viewMessage(false);
+                                            }
+                                            break;
+                                        case 2:
+                                            if (electronic instanceof Tivi) {
+                                                Tivi tivi = (Tivi) electronic;
+                                                Tivi updatedTivi = adminView.viewEditTivi(tivi);
+                                                result = adminService.updateTivi(updatedTivi);
+                                                adminView.viewMessage(result);
+                                            } else {
+                                                adminView.viewMessage(false);
+                                            }
+                                            break;
+                                    }
+                                }
+                            } else {
+                                adminView.viewMessage(false);
+                            }
                             break;
                         case 3:
-                            int deleteChoice = adminView.selectProductTypeToDelete();
+                            int deleteChoice = adminView.selectProductType();
                             code = adminView.inputCode();
                             electronic = adminService.findByCode(code);
                             if (electronic == null) {
