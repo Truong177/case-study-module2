@@ -15,4 +15,8 @@ public class Cart {
     public void setItems(Map<Electronic, Integer> items) {
         this.items = items;
     }
+
+    public void clear() {
+        items.clear();
+    }
 }

@@ -5,6 +5,7 @@ import models.electronic.Laptop;
 import models.electronic.Tivi;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IAdminService {
 
@@ -19,4 +20,10 @@ public interface IAdminService {
     boolean updateLaptop(Laptop updateLaptop);
 
     boolean updateTivi(Tivi updateTivi);
+
+
+    Map<Electronic, Integer> sortProduct();
+    boolean updateElectronic(Electronic updateElectronic);
+
+    List<Electronic> getAllProduct();
 }

@@ -1,5 +1,7 @@
 package models.electronic;
 
+import java.util.Objects;
+
 public class Electronic {
     private int code;
     private String name;
@@ -17,6 +19,12 @@ public class Electronic {
         this.manufacturer = manufacturer;
         this.quantity = quantity;
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(code);
+    }
+
     public Electronic(Electronic other) {
         this.code = other.code;
         this.name = other.name;

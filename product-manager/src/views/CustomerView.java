@@ -73,7 +73,7 @@ public class CustomerView {
             System.out.println("Enter quantity: ");
             int quantity = Integer.parseInt(scanner.nextLine());
 
-            electronic.setQuantity(quantity); // Store quantity in electronic object for return
+            electronic.setQuantity(quantity);
             return electronic;
         } else {
             System.out.println("Product not found.");
@@ -95,18 +95,6 @@ public class CustomerView {
             }
         }
     }
-
-    public void disPlayProduct(Electronic electronic) {
-        if (electronic != null) {
-            System.out.println("Code: " + electronic.getCode());
-            System.out.println("Name: " + electronic.getName());
-            System.out.println("Price: " + electronic.getPrice());
-        } else {
-            System.out.println("No product found.");
-
-        }
-    }
-
     public void checkout(User user) {
         Map<Electronic, Integer> items = user.getCart().getItems();
         if (items.isEmpty()) {
@@ -120,9 +108,17 @@ public class CustomerView {
                 }
                 itemsToRemove.add(electronic);
             }
-            for (Electronic electronic : itemsToRemove) {
-                items.remove(electronic);
+            List<Electronic> itemsInStock = adminService.getAll();
+            for (int i = 0; i < itemsInStock.size(); i++) {
+                Electronic electronicis = itemsInStock.get(i);
+                for (Electronic electronic : itemsToRemove) {
+                    if(electronicis.getCode() == electronic.getCode()) {
+                        electronicis.setQuantity(electronicis.getQuantity() - items.keySet().stream().filter(x -> x.equals(electronic)).toList().get(0).getQuantity());
+                        adminService.updateElectronic(electronicis);
+                    }
+                }
             }
+            user.getCart().clear();
             System.out.println("Checkout successful. Your cart is now empty.");
         }
     }
@@ -130,11 +126,10 @@ public class CustomerView {
     public void viewPurchaseHistory(User user) {
         System.out.println("--------Purchase History--------");
         List<Electronic> purchaseHistory = user.getPurchaseHistory();
-        if (purchaseHistory.isEmpty()){
+        if (purchaseHistory.isEmpty()) {
             System.out.println("No purchase history.");
-        }
-        else {
-            for (Electronic electronic : purchaseHistory){
+        } else {
+            for (Electronic electronic : purchaseHistory) {
                 System.out.println("Product: " + electronic.getName() + ", Code: " + electronic.getCode() +
                         ", Quantity: " + electronic.getQuantity() + ", Price: " + electronic.getPrice());
             }
@@ -145,9 +140,9 @@ public class CustomerView {
         System.out.print("Are you sure you want to checkout? (yes/no): ");
         Scanner scanner = new Scanner(System.in);
         String isConfirm = scanner.nextLine();
-        if (isConfirm.equals("yes")){
+        if (isConfirm.equals("yes")) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }

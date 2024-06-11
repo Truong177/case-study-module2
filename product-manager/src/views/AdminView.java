@@ -6,6 +6,7 @@ import models.electronic.Tivi;
 
 import java.sql.SQLOutput;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class AdminView {
@@ -18,7 +19,6 @@ public class AdminView {
         System.out.println("4: Display products");
         System.out.println("5: Search product");
         System.out.println("6: Sort products");
-        System.out.println("7: Check inventory");
         System.out.println("0: Exit");
         System.out.print("Input your choice: ");
         Scanner scanner = new Scanner(System.in);
@@ -26,10 +26,10 @@ public class AdminView {
         while (true) {
             try {
                 choice = Integer.parseInt(scanner.nextLine());
-                if (choice >= 0 && choice <= 7) {
+                if (choice >= 0 && choice <= 6) {
                     break;
                 } else {
-                    System.out.print("Invalid choice. Please enter a number between 0 and 7: ");
+                    System.out.print("Invalid choice. Please enter a number between 0 and 6: ");
                 }
             } catch (NumberFormatException e) {
                 System.out.print("Invalid input. Please enter a valid number: ");
@@ -38,31 +38,21 @@ public class AdminView {
         return choice;
     }
 
-    public Electronic viewAdd() {
+    public Electronic viewAddLaptop() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Input product type (1: Laptop, 2: TV): ");
-        int type = Integer.parseInt(scanner.nextLine());
         System.out.println("Input your code ");
         int code = Integer.parseInt(scanner.nextLine());
         System.out.println("Input your name ");
-        String name = scanner.nextLine();
+        String name = "Laptop " + scanner.nextLine();
         System.out.println("Input your price");
         double price = Double.parseDouble(scanner.nextLine());
         System.out.println("Input your manufacturer");
         String manufacturer = scanner.nextLine();
         System.out.println("Input your quantity");
         int quantity = Integer.parseInt(scanner.nextLine());
-        if (type == 1) {
-            System.out.println("Input your ram ");
-            int ram = Integer.parseInt(scanner.nextLine());
-            return new Laptop(code, name, price, manufacturer, quantity, ram);
-        } else if (type == 2) {
-            System.out.println("Input your size");
-            int size = Integer.parseInt(scanner.nextLine());
-            return new Tivi(code, name, price, manufacturer, quantity, size);
-        } else {
-            return null;
-        }
+        System.out.println("Input your ram ");
+        int ram = Integer.parseInt(scanner.nextLine());
+        return new Laptop(code, name, price, manufacturer, quantity, ram);
     }
 
 
@@ -110,16 +100,28 @@ public class AdminView {
                     (displayChoice == 3 && electronic instanceof Tivi)) {
                 if (electronic instanceof Laptop) {
                     Laptop laptop = (Laptop) electronic;
-                    System.out.println("Code: " + laptop.getCode() + ", Name: " + laptop.getName() + ", Price: " + laptop.getPrice() + ", Ram: " + laptop.getRam() + "GB" +", Quantity: " +laptop.getQuantity());
+                    System.out.println("Code: " + laptop.getCode() +
+                            ", Name: " + laptop.getName() +
+                            ", Price: " + laptop.getPrice() +
+                            ", Ram: " + laptop.getRam() + "GB" +
+                            ", Quantity: " + laptop.getQuantity());
                 } else if (electronic instanceof Tivi) {
                     Tivi tivi = (Tivi) electronic;
-                    System.out.println("Code: " + tivi.getCode() + ", Name: " + tivi.getName() + ", Price: " + tivi.getPrice() + ", Size: " + tivi.getSize() + " inches" + ", Quantity: " +tivi.getQuantity());
+                    System.out.println("Code: " + tivi.getCode() +
+                            ", Name: " + tivi.getName() +
+                            ", Price: " + tivi.getPrice() +
+                            ", Size: " + tivi.getSize() + " inches" +
+                            ", Quantity: " + tivi.getQuantity());
                 } else {
-                    System.out.println("Code: " + electronic.getCode() + ", Name: " + electronic.getName() + ", Price: " + electronic.getPrice());
+                    System.out.println("Code: " + electronic.getCode() +
+                            ", Name: " + electronic.getName() +
+                            ", Price: " + electronic.getPrice() +
+                            ", Quantity: " + electronic.getQuantity());
                 }
             }
         }
     }
+
 
     public int selectProductType() {
         System.out.println("Select product type :");
@@ -133,7 +135,7 @@ public class AdminView {
 
     public Laptop viewEditLaptop(Laptop laptop) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Updating product " +laptop.getName());
+        System.out.println("Updating product " + laptop.getName());
         System.out.println("Input your code ");
         int code = Integer.parseInt(scanner.nextLine());
         System.out.println("Input your name ");
@@ -157,7 +159,7 @@ public class AdminView {
 
     public Tivi viewEditTivi(Tivi tivi) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Updating product " +tivi.getName());
+        System.out.println("Updating product " + tivi.getName());
         System.out.println("Input your code ");
         int code = Integer.parseInt(scanner.nextLine());
         System.out.println("Input your name ");
@@ -168,7 +170,7 @@ public class AdminView {
         String manufacturer = scanner.nextLine();
         System.out.println("Input your quantity");
         int quantity = Integer.parseInt(scanner.nextLine());
-        System.out.println("Input your ram ");
+        System.out.println("Input your size ");
         int size = Integer.parseInt(scanner.nextLine());
         tivi.setCode(code);
         tivi.setName(name);
@@ -177,5 +179,42 @@ public class AdminView {
         tivi.setQuantity(quantity);
         tivi.setSize(size);
         return tivi;
+    }
+
+    public void disPlayProduct(Electronic electronic) {
+        if (electronic != null) {
+            System.out.println("Code: " + electronic.getCode());
+            System.out.println("Name: " + electronic.getName());
+            System.out.println("Price: " + electronic.getPrice());
+        } else {
+            System.out.println("No product found.");
+
+        }
+    }
+
+    public void sortProductView(Map<Electronic, Integer> sortedProducts) {
+        System.out.println("Sorted Products:");
+        for (Map.Entry<Electronic, Integer> entry : sortedProducts.entrySet()) {
+            Electronic product = entry.getKey();
+            int quantity = entry.getValue();
+            System.out.println("Code: " + product.getCode() + ", Name: " + product.getName() + ", Price: " + product.getPrice() + ", Quantity: " + quantity);
+        }
+    }
+
+    public Electronic viewAddTivi() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Input your code ");
+        int code = Integer.parseInt(scanner.nextLine());
+        System.out.println("Input your name ");
+        String name = "Tivi " + scanner.nextLine();
+        System.out.println("Input your price");
+        double price = Double.parseDouble(scanner.nextLine());
+        System.out.println("Input your manufacturer");
+        String manufacturer = scanner.nextLine();
+        System.out.println("Input your quantity");
+        int quantity = Integer.parseInt(scanner.nextLine());
+        System.out.println("Input your size ");
+        int size = Integer.parseInt(scanner.nextLine());
+        return new Tivi(code, name, price, manufacturer, quantity, size);
     }
 }

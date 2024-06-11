@@ -41,7 +41,7 @@ public class ElectronicController {
                         case 1:
                             code = adminView.inputCode();
                             electronic = adminService.findByCode(code);
-                            customerView.disPlayProduct(electronic);
+                            adminView.disPlayProduct(electronic);
                             break;
                         case 2:
                             user = customerView.viewAddCustomer();
@@ -80,9 +80,18 @@ public class ElectronicController {
                     int adminChoice = adminView.displayMenuAdmin();
                     switch (adminChoice) {
                         case 1:
-                            electronic = adminView.viewAdd();
-                            result = adminService.add(electronic);
-                            adminView.viewMessage(result);
+                            int choiceElectronic = adminView.selectProductType();
+                            if (choiceElectronic == 1){
+                                electronic = adminView.viewAddLaptop();
+                                result = adminService.add(electronic);
+                                adminView.viewMessage(result);
+                            }
+                            if (choiceElectronic == 2){
+                                electronic = adminView.viewAddTivi();
+                                result = adminService.add(electronic);
+                                adminView.viewMessage(result);
+                            }
+
                             break;
                         case 2:
                             int choiceEdit = adminView.selectProductType();
@@ -136,8 +145,17 @@ public class ElectronicController {
                             break;
                         case 4:
                             int displayChoice = adminView.selectProductTypeToDisplay();
-                            List<Electronic> electronics = adminService.getAll();
+                            List<Electronic> electronics = adminService.getAllProduct();
                             adminView.display(electronics, displayChoice);
+                            break;
+                        case 5:
+                            code = adminView.inputCode();
+                            electronic = adminService.findByCode(code);
+                            adminView.disPlayProduct(electronic);
+                            break;
+                        case 6:
+                            Map<Electronic, Integer> sortedProducts = adminService.sortProduct();
+                            adminView.sortProductView(sortedProducts);
                             break;
                         case 0:
                             break;
