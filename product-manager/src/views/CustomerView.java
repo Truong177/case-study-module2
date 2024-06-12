@@ -45,38 +45,47 @@ public class CustomerView {
 
     public User viewAddCustomer() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter user ID: ");
-        int userId = Integer.parseInt(scanner.nextLine());
+        try {
+            System.out.println("Enter user ID: ");
+            int userId = Integer.parseInt(scanner.nextLine());
 
-        User user = users.get(userId);
-        if (user == null) {
-            System.out.println("Enter user name: ");
-            String name = scanner.nextLine();
+            User user = users.get(userId);
+            if (user == null) {
+                System.out.println("Enter user name: ");
+                String name = scanner.nextLine();
 
-            System.out.println("Enter phone number: ");
-            long phone = Long.parseLong(scanner.nextLine());
+                System.out.println("Enter phone number: ");
+                long phone = Long.parseLong(scanner.nextLine());
 
-            user = new User(userId, name, phone);
-            users.put(userId, user);
+                user = new User(userId, name, phone);
+                users.put(userId, user);
+            }
+            return user;
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input. Please try again.");
+            return null;
         }
-        return user;
     }
 
     public Electronic viewAddItem() {
         Scanner scanner = new Scanner(System.in);
+        try {
+            System.out.println("Enter product code: ");
+            int code = Integer.parseInt(scanner.nextLine());
 
-        System.out.println("Enter product code: ");
-        int code = Integer.parseInt(scanner.nextLine());
+            Electronic electronic = adminService.findByCode(code);
+            if (electronic != null) {
+                System.out.println("Enter quantity: ");
+                int quantity = Integer.parseInt(scanner.nextLine());
 
-        Electronic electronic = adminService.findByCode(code);
-        if (electronic != null) {
-            System.out.println("Enter quantity: ");
-            int quantity = Integer.parseInt(scanner.nextLine());
-
-            electronic.setQuantity(quantity);
-            return electronic;
-        } else {
-            System.out.println("Product not found.");
+                electronic.setQuantity(quantity);
+                return electronic;
+            } else {
+                System.out.println("Product not found.");
+                return null;
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input. Please try again.");
             return null;
         }
     }
@@ -95,6 +104,7 @@ public class CustomerView {
             }
         }
     }
+
     public void checkout(User user) {
         Map<Electronic, Integer> items = user.getCart().getItems();
         if (items.isEmpty()) {
@@ -112,8 +122,8 @@ public class CustomerView {
             for (int i = 0; i < itemsInStock.size(); i++) {
                 Electronic electronicis = itemsInStock.get(i);
                 for (Electronic electronic : itemsToRemove) {
-                    if(electronicis.getCode() == electronic.getCode()) {
-                        electronicis.setQuantity(electronicis.getQuantity() - items.keySet().stream().filter(x -> x.equals(electronic)).toList().get(0).getQuantity());
+                    if (electronicis.getCode() == electronic.getCode()) {
+                        electronicis.setQuantity(electronicis.getQuantity() - items.get(electronic));
                         adminService.updateElectronic(electronicis);
                     }
                 }
@@ -140,10 +150,6 @@ public class CustomerView {
         System.out.print("Are you sure you want to checkout? (yes/no): ");
         Scanner scanner = new Scanner(System.in);
         String isConfirm = scanner.nextLine();
-        if (isConfirm.equals("yes")) {
-            return true;
-        } else {
-            return false;
-        }
+        return isConfirm.equalsIgnoreCase("yes");
     }
 }

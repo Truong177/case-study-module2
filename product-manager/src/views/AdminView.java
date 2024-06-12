@@ -4,7 +4,6 @@ import models.electronic.Electronic;
 import models.electronic.Laptop;
 import models.electronic.Tivi;
 
-import java.sql.SQLOutput;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -40,21 +39,25 @@ public class AdminView {
 
     public Electronic viewAddLaptop() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Input your code ");
-        int code = Integer.parseInt(scanner.nextLine());
-        System.out.println("Input your name ");
-        String name = "Laptop " + scanner.nextLine();
-        System.out.println("Input your price");
-        double price = Double.parseDouble(scanner.nextLine());
-        System.out.println("Input your manufacturer");
-        String manufacturer = scanner.nextLine();
-        System.out.println("Input your quantity");
-        int quantity = Integer.parseInt(scanner.nextLine());
-        System.out.println("Input your ram ");
-        int ram = Integer.parseInt(scanner.nextLine());
-        return new Laptop(code, name, price, manufacturer, quantity, ram);
+        try {
+            System.out.println("Input your code: ");
+            int code = Integer.parseInt(scanner.nextLine());
+            System.out.println("Input your name: ");
+            String name = "Laptop " + scanner.nextLine();
+            System.out.println("Input your price: ");
+            double price = Double.parseDouble(scanner.nextLine());
+            System.out.println("Input your manufacturer: ");
+            String manufacturer = scanner.nextLine();
+            System.out.println("Input your quantity: ");
+            int quantity = Integer.parseInt(scanner.nextLine());
+            System.out.println("Input your ram: ");
+            int ram = Integer.parseInt(scanner.nextLine());
+            return new Laptop(code, name, price, manufacturer, quantity, ram);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input. Please try again.");
+            return null;
+        }
     }
-
 
     public void viewMessage(boolean result) {
         if (result) {
@@ -64,22 +67,23 @@ public class AdminView {
         }
     }
 
-
     public int inputCode() {
-        System.out.println("Input code ");
+        System.out.println("Input code: ");
         Scanner scanner = new Scanner(System.in);
-        return scanner.nextInt();
+        int code = -1;
+        try {
+            code = Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input. Please enter a valid number.");
+        }
+        return code;
     }
 
     public boolean confirmDelete(Electronic electronic) {
         System.out.print("Are you sure you want to delete product? (yes/no): ");
         Scanner scanner = new Scanner(System.in);
         String isConfirm = scanner.nextLine();
-        if (isConfirm.equals("yes")) {
-            return true;
-        } else {
-            return false;
-        }
+        return isConfirm.equalsIgnoreCase("yes");
     }
 
     public int selectProductTypeToDisplay() {
@@ -89,9 +93,14 @@ public class AdminView {
         System.out.println("3: Display TVs");
         System.out.print("Input your choice: ");
         Scanner scanner = new Scanner(System.in);
-        return scanner.nextInt();
+        int choice = -1;
+        try {
+            choice = Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input. Please enter a valid number.");
+        }
+        return choice;
     }
-
 
     public void display(List<Electronic> electronics, int displayChoice) {
         for (Electronic electronic : electronics) {
@@ -122,62 +131,74 @@ public class AdminView {
         }
     }
 
-
     public int selectProductType() {
-        System.out.println("Select product type :");
+        System.out.println("Select product type:");
         System.out.println("1: Laptop");
         System.out.println("2: TV");
         System.out.print("Input your choice: ");
-
         Scanner scanner = new Scanner(System.in);
-        return scanner.nextInt();
+        int choice = -1;
+        try {
+            choice = Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input. Please enter a valid number.");
+        }
+        return choice;
     }
 
     public Laptop viewEditLaptop(Laptop laptop) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Updating product " + laptop.getName());
-        System.out.println("Input your code ");
-        int code = Integer.parseInt(scanner.nextLine());
-        System.out.println("Input your name ");
-        String name = scanner.nextLine();
-        System.out.println("Input your price");
-        double price = Double.parseDouble(scanner.nextLine());
-        System.out.println("Input your manufacturer");
-        String manufacturer = scanner.nextLine();
-        System.out.println("Input your quantity");
-        int quantity = Integer.parseInt(scanner.nextLine());
-        System.out.println("Input your ram ");
-        int ram = Integer.parseInt(scanner.nextLine());
-        laptop.setCode(code);
-        laptop.setName(name);
-        laptop.setPrice(price);
-        laptop.setManufacturer(manufacturer);
-        laptop.setQuantity(quantity);
-        laptop.setRam(ram);
+        try {
+            System.out.println("Updating product " + laptop.getName());
+            System.out.println("Input your code: ");
+            int code = Integer.parseInt(scanner.nextLine());
+            System.out.println("Input your name: ");
+            String name = scanner.nextLine();
+            System.out.println("Input your price: ");
+            double price = Double.parseDouble(scanner.nextLine());
+            System.out.println("Input your manufacturer: ");
+            String manufacturer = scanner.nextLine();
+            System.out.println("Input your quantity: ");
+            int quantity = Integer.parseInt(scanner.nextLine());
+            System.out.println("Input your ram: ");
+            int ram = Integer.parseInt(scanner.nextLine());
+            laptop.setCode(code);
+            laptop.setName(name);
+            laptop.setPrice(price);
+            laptop.setManufacturer(manufacturer);
+            laptop.setQuantity(quantity);
+            laptop.setRam(ram);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input. Please try again.");
+        }
         return laptop;
     }
 
     public Tivi viewEditTivi(Tivi tivi) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Updating product " + tivi.getName());
-        System.out.println("Input your code ");
-        int code = Integer.parseInt(scanner.nextLine());
-        System.out.println("Input your name ");
-        String name = scanner.nextLine();
-        System.out.println("Input your price");
-        double price = Double.parseDouble(scanner.nextLine());
-        System.out.println("Input your manufacturer");
-        String manufacturer = scanner.nextLine();
-        System.out.println("Input your quantity");
-        int quantity = Integer.parseInt(scanner.nextLine());
-        System.out.println("Input your size ");
-        int size = Integer.parseInt(scanner.nextLine());
-        tivi.setCode(code);
-        tivi.setName(name);
-        tivi.setPrice(price);
-        tivi.setManufacturer(manufacturer);
-        tivi.setQuantity(quantity);
-        tivi.setSize(size);
+        try {
+            System.out.println("Updating product " + tivi.getName());
+            System.out.println("Input your code: ");
+            int code = Integer.parseInt(scanner.nextLine());
+            System.out.println("Input your name: ");
+            String name = scanner.nextLine();
+            System.out.println("Input your price: ");
+            double price = Double.parseDouble(scanner.nextLine());
+            System.out.println("Input your manufacturer: ");
+            String manufacturer = scanner.nextLine();
+            System.out.println("Input your quantity: ");
+            int quantity = Integer.parseInt(scanner.nextLine());
+            System.out.println("Input your size: ");
+            int size = Integer.parseInt(scanner.nextLine());
+            tivi.setCode(code);
+            tivi.setName(name);
+            tivi.setPrice(price);
+            tivi.setManufacturer(manufacturer);
+            tivi.setQuantity(quantity);
+            tivi.setSize(size);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input. Please try again.");
+        }
         return tivi;
     }
 
@@ -188,7 +209,6 @@ public class AdminView {
             System.out.println("Price: " + electronic.getPrice());
         } else {
             System.out.println("No product found.");
-
         }
     }
 
@@ -203,18 +223,23 @@ public class AdminView {
 
     public Electronic viewAddTivi() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Input your code ");
-        int code = Integer.parseInt(scanner.nextLine());
-        System.out.println("Input your name ");
-        String name = "Tivi " + scanner.nextLine();
-        System.out.println("Input your price");
-        double price = Double.parseDouble(scanner.nextLine());
-        System.out.println("Input your manufacturer");
-        String manufacturer = scanner.nextLine();
-        System.out.println("Input your quantity");
-        int quantity = Integer.parseInt(scanner.nextLine());
-        System.out.println("Input your size ");
-        int size = Integer.parseInt(scanner.nextLine());
-        return new Tivi(code, name, price, manufacturer, quantity, size);
+        try {
+            System.out.println("Input your code: ");
+            int code = Integer.parseInt(scanner.nextLine());
+            System.out.println("Input your name: ");
+            String name = "Tivi " + scanner.nextLine();
+            System.out.println("Input your price: ");
+            double price = Double.parseDouble(scanner.nextLine());
+            System.out.println("Input your manufacturer: ");
+            String manufacturer = scanner.nextLine();
+            System.out.println("Input your quantity: ");
+            int quantity = Integer.parseInt(scanner.nextLine());
+            System.out.println("Input your size: ");
+            int size = Integer.parseInt(scanner.nextLine());
+            return new Tivi(code, name, price, manufacturer, quantity, size);
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input. Please try again.");
+            return null;
+        }
     }
 }
