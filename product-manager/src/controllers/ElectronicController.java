@@ -3,13 +3,16 @@ package controllers;
 import models.electronic.Electronic;
 import models.electronic.Laptop;
 import models.electronic.Tivi;
+import models.login.Login;
 import models.user.User;
 import services.IAdminService;
 import services.ICustomerService;
 import services.impl.AdminService;
 import services.impl.CustomerService;
+import services.impl.LoginService;
 import views.AdminView;
 import views.CustomerView;
+import views.LoginView;
 
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +28,9 @@ public class ElectronicController {
         Map<Electronic, Integer> items = new HashMap<>();
         Electronic electronic;
         User user;
+        Login login;
+        Boolean checkLogin;
+        LoginView loginView = new LoginView();
         int choice;
         boolean result;
         int code;
@@ -35,6 +41,16 @@ public class ElectronicController {
             System.out.print("Input your choice: ");
             choice = new Scanner(System.in).nextInt();
             if (choice == 1) {
+                do {
+                    login = loginView.viewLogin();
+                    checkLogin = LoginService.checkLoginCustomer(login);
+                    if (checkLogin) {
+                        loginView.viewMessage(true);
+                    } else {
+                        loginView.viewMessage(false);
+                    }
+                }
+                while (!checkLogin);
                 while (true) {
                     int customerChoice = customerView.displayMenuCustomer();
                     switch (customerChoice) {
@@ -76,6 +92,16 @@ public class ElectronicController {
                 }
             }
             if (choice == 2) {
+                do {
+                    login = loginView.viewLogin();
+                    checkLogin = LoginService.checkLoginManager(login);
+                    if (checkLogin) {
+                        loginView.viewMessage(true);
+                    } else {
+                        loginView.viewMessage(false);
+                    }
+                }
+                while (!checkLogin);
                 while (true) {
                     int adminChoice = adminView.displayMenuAdmin();
                     switch (adminChoice) {
